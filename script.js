@@ -54,8 +54,12 @@ function renderContent() {
   });
 }
 
-// Admin giriş/çıkış
-document.getElementById("adminLoginBtn").onclick = () => loginPanel.classList.remove("hidden");
+// Gizli alan → login paneli aç
+document.getElementById("secretLoginArea").onclick = () => {
+  loginPanel.classList.remove("hidden");
+};
+
+// Login paneli
 document.getElementById("cancelLogin").onclick = () => loginPanel.classList.add("hidden");
 document.getElementById("loginBtn").onclick = () => {
   const u = document.getElementById("username").value;
@@ -70,6 +74,8 @@ document.getElementById("loginBtn").onclick = () => {
     alert("Hatalı giriş!");
   }
 };
+
+// Çıkış
 document.getElementById("logoutBtn").onclick = () => {
   isAdmin = false;
   adminPanel.classList.add("hidden");
