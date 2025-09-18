@@ -9,7 +9,6 @@
 <body>
   <header>
     <h1 id="siteTitle">Çiğdemce Ev Yemekleri & Meze</h1>
-    <button id="adminLoginBtn">Admin Girişi</button>
   </header>
 
   <!-- Sekmeler -->
@@ -18,20 +17,8 @@
   <!-- Menü içerikleri -->
   <main id="menuContent"></main>
 
-  <!-- Admin Panel (modal gibi açılacak) -->
-  <div id="adminPanel" class="hidden">
-    <h2>Admin Panel</h2>
-    <label>Başlık: <input type="text" id="siteTitleInput"></label>
-    <label>Renk: <input type="color" id="siteColorInput"></label>
-    <label>Yeni Sekme Adı: <input type="text" id="newTabName"></label>
-    <button id="addTabBtn">Sekme Ekle</button>
-    <h3>Ürün Ekle</h3>
-    <label>Ürün Adı: <input type="text" id="productName"></label>
-    <label>Ürün Açıklaması: <input type="text" id="productDesc"></label>
-    <label>Ürün Resmi: <input type="file" id="productImage"></label>
-    <button id="addProductBtn">Ürün Ekle</button>
-    <button id="logoutBtn">Çıkış</button>
-  </div>
+  <!-- Gizli Admin Giriş Noktası -->
+  <div id="secretLoginArea" title="Admin Girişi için tıklayın"></div>
 
   <!-- Admin giriş ekranı -->
   <div id="loginPanel" class="hidden">
@@ -40,6 +27,25 @@
     <label>Şifre: <input type="password" id="password"></label>
     <button id="loginBtn">Giriş Yap</button>
     <button id="cancelLogin">İptal</button>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="adminPanel" class="hidden">
+    <h2>Admin Panel</h2>
+    <label>Başlık: <input type="text" id="siteTitleInput"></label>
+    <label>Renk: <input type="color" id="siteColorInput"></label>
+
+    <h3>Sekme Yönetimi</h3>
+    <label>Yeni Sekme Adı: <input type="text" id="newTabName"></label>
+    <button id="addTabBtn">Sekme Ekle</button>
+
+    <h3>Ürün Yönetimi</h3>
+    <label>Ürün Adı: <input type="text" id="productName"></label>
+    <label>Ürün Açıklaması: <input type="text" id="productDesc"></label>
+    <label>Ürün Resmi: <input type="file" id="productImage"></label>
+    <button id="addProductBtn">Ürün Ekle</button>
+
+    <button id="logoutBtn">Çıkış</button>
   </div>
 
   <script src="script.js"></script>
