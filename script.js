@@ -1,8 +1,8 @@
-// Admin bilgileri (basit demo)
+// Admin bilgileri
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "1234";
 
-// Veriyi LocalStorage'da tutuyoruz
+// LocalStorage'dan veri yükle
 let data = JSON.parse(localStorage.getItem("menuData")) || {
   title: "Çiğdemce Ev Yemekleri & Meze",
   color: "#c0392b",
