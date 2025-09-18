@@ -1,25 +1,33 @@
-// Admin bilgileri
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "1234";
 
-// LocalStorage'dan veri yükle
 let data = JSON.parse(localStorage.getItem("menuData")) || {
   title: "Çiğdemce Ev Yemekleri & Meze",
   logo: "",
+  headerMsg: "",
+  headerMsgActive: false,
   bgColor: "#fff8f0",
   textColor: "#333333",
   font: "Arial",
-  tabs: { "Günün Menüsü": [] }
+  tabs: { "Günün Menüsü": [] },
+  footerLinks: { whatsapp: "#", instagram: "#", location: "#" }
 };
 
-let currentTab = "Günün Menüsü";
+let currentTab = Object.keys(data.tabs)[0];
 let isAdmin = false;
 
 const siteTitle = document.getElementById("siteTitle");
+const siteLogo = document.getElementById("siteLogo");
+const headerMsg = document.getElementById("headerMsg");
 const menuTabs = document.getElementById("menuTabs");
 const menuContent = document.getElementById("menuContent");
 const adminPanel = document.getElementById("adminPanel");
 const loginPanel = document.getElementById("loginPanel");
+
+// Footer links
+const whatsappLink = document.getElementById("whatsappLink");
+const instagramLink = document.getElementById("instagramLink");
+const locationLink = document.getElementById("locationLink");
 
 // Render
 function render() {
@@ -29,13 +37,18 @@ function render() {
   document.body.style.color = data.textColor;
   document.body.style.fontFamily = data.font;
 
-  // Logo
-  let header = document.querySelector("header");
-  header.innerHTML = `<h1 id="siteTitle">${data.title}</h1>`;
-  if (data.logo) {
-    let img = document.createElement("img");
-    img.src = data.logo;
-    header.prepend(img);
+  if(data.logo){
+    siteLogo.src = data.logo;
+    siteLogo.classList.remove("hidden");
+  } else {
+    siteLogo.classList.add("hidden");
+  }
+
+  if(data.headerMsgActive && data.headerMsg){
+    headerMsg.textContent = data.headerMsg;
+    headerMsg.classList.remove("hidden");
+  } else {
+    headerMsg.classList.add("hidden");
   }
 
   // Sekmeler
@@ -48,6 +61,11 @@ function render() {
   });
 
   renderContent();
+
+  // Footer
+  whatsappLink.href = data.footerLinks.whatsapp;
+  instagramLink.href = data.footerLinks.instagram;
+  locationLink.href = data.footerLinks.location;
 }
 
 function renderContent() {
@@ -66,33 +84,28 @@ function renderContent() {
   });
 }
 
-// Ürün sil
-function deleteProduct(index) {
-  if (!isAdmin) return;
-  data.tabs[currentTab].splice(index, 1);
-  save();
-}
-
-// Gizli alan → login paneli aç
-document.getElementById("secretLoginArea").onclick = () => {
-  loginPanel.classList.remove("hidden");
-};
-
-// Login paneli
+// Admin işlemleri
+document.getElementById("secretLoginArea").onclick = () => loginPanel.classList.remove("hidden");
 document.getElementById("cancelLogin").onclick = () => loginPanel.classList.add("hidden");
 document.getElementById("loginBtn").onclick = () => {
   const u = document.getElementById("username").value;
   const p = document.getElementById("password").value;
-  if (u === ADMIN_USER && p === ADMIN_PASS) {
+  if(u === ADMIN_USER && p === ADMIN_PASS){
     isAdmin = true;
     loginPanel.classList.add("hidden");
     adminPanel.classList.remove("hidden");
 
-    // Admin inputlarını doldur
+    // admin input doldur
     document.getElementById("siteTitleInput").value = data.title;
+    document.getElementById("siteLogoInput").value = data.logo;
+    document.getElementById("headerMsgInput").value = data.headerMsg;
+    document.getElementById("headerMsgActive").checked = data.headerMsgActive;
     document.getElementById("bgColorInput").value = data.bgColor;
     document.getElementById("textColorInput").value = data.textColor;
     document.getElementById("fontSelect").value = data.font;
+    document.getElementById("whatsappInput").value = data.footerLinks.whatsapp;
+    document.getElementById("instagramInput").value = data.footerLinks.instagram;
+    document.getElementById("locationInput").value = data.footerLinks.location;
   } else {
     alert("Hatalı giriş!");
   }
@@ -100,39 +113,32 @@ document.getElementById("loginBtn").onclick = () => {
 
 // Genel ayarlar
 document.getElementById("siteTitleInput").oninput = e => { data.title = e.target.value; save(); };
+document.getElementById("siteLogoInput").oninput = e => { data.logo = e.target.value; save(); };
+document.getElementById("headerMsgInput").oninput = e => { data.headerMsg = e.target.value; save(); };
+document.getElementById("headerMsgActive").onchange = e => { data.headerMsgActive = e.target.checked; save(); };
 document.getElementById("bgColorInput").oninput = e => { data.bgColor = e.target.value; save(); };
 document.getElementById("textColorInput").oninput = e => { data.textColor = e.target.value; save(); };
 document.getElementById("fontSelect").onchange = e => { data.font = e.target.value; save(); };
 
-document.getElementById("siteLogoInput").onchange = e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => { data.logo = ev.target.result; save(); };
-  reader.readAsDataURL(file);
-};
-
 // Sekme yönetimi
 document.getElementById("addTabBtn").onclick = () => {
   const name = document.getElementById("newTabName").value.trim();
-  if (name && !data.tabs[name]) {
+  if(name && !data.tabs[name]){
     data.tabs[name] = [];
     currentTab = name;
     save();
   }
 };
-
 document.getElementById("removeTabBtn").onclick = () => {
-  if (confirm(`${currentTab} sekmesini silmek istiyor musun?`)) {
+  if(confirm(`${currentTab} sekmesini silmek istiyor musun?`)){
     delete data.tabs[currentTab];
     currentTab = Object.keys(data.tabs)[0] || "Günün Menüsü";
     save();
   }
 };
-
 document.getElementById("renameTabBtn").onclick = () => {
   const newName = prompt("Yeni sekme adı:", currentTab);
-  if (newName && newName !== currentTab) {
+  if(newName && newName!==currentTab){
     data.tabs[newName] = data.tabs[currentTab];
     delete data.tabs[currentTab];
     currentTab = newName;
@@ -145,20 +151,29 @@ document.getElementById("addProductBtn").onclick = () => {
   const name = document.getElementById("productName").value;
   const desc = document.getElementById("productDesc").value;
   const price = document.getElementById("productPrice").value;
-  const file = document.getElementById("productImage").files[0];
-  if (!file) return alert("Resim seçiniz");
+  const img = document.getElementById("productImage").value.trim();
+  if(!img) return alert("Resim URL giriniz");
 
-  const reader = new FileReader();
-  reader.onload = e => {
-    data.tabs[currentTab].push({ name, desc, price, image: e.target.result });
-    save();
-    document.getElementById("productName").value = "";
-    document.getElementById("productDesc").value = "";
-    document.getElementById("productPrice").value = "";
-    document.getElementById("productImage").value = "";
-  };
-  reader.readAsDataURL(file);
+  data.tabs[currentTab].push({name, desc, price, image: img});
+  save();
+
+  document.getElementById("productName").value="";
+  document.getElementById("productDesc").value="";
+  document.getElementById("productPrice").value="";
+  document.getElementById("productImage").value="";
 };
+
+// Footer linkleri
+document.getElementById("whatsappInput").oninput = e => { data.footerLinks.whatsapp = e.target.value; save(); };
+document.getElementById("instagramInput").oninput = e => { data.footerLinks.instagram = e.target.value; save(); };
+document.getElementById("locationInput").oninput = e => { data.footerLinks.location = e.target.value; save(); };
+
+// Ürün sil
+function deleteProduct(index){
+  if(!isAdmin) return;
+  data.tabs[currentTab].splice(index,1);
+  save();
+}
 
 // Çıkış
 document.getElementById("logoutBtn").onclick = () => {
@@ -168,10 +183,10 @@ document.getElementById("logoutBtn").onclick = () => {
 };
 
 // Kaydet
-function save() {
+function save(){
   localStorage.setItem("menuData", JSON.stringify(data));
   render();
 }
 
-// İlk yükleme
+// İlk render
 render();
