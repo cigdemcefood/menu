@@ -47,7 +47,7 @@ header {
   border-radius: 10px;
 }
 
-/* Gizli login alanı (küçük kutu sağ alt köşede) */
+/* Gizli login alanı */
 #secretLoginArea {
   position: fixed;
   bottom: 5px;
@@ -59,7 +59,7 @@ header {
   z-index: 100;
 }
 
-/* Modal */
+/* Panel ve login modal */
 .hidden {
   display: none;
 }
@@ -75,4 +75,21 @@ header {
   border-radius: 12px;
   z-index: 1000;
   width: 300px;
+}
+
+#adminPanel h2, #loginPanel h2 {
+  margin-top: 0;
+}
+
+#adminPanel input, #loginPanel input {
+  width: 100%;
+  margin: 5px 0;
+  padding: 5px;
+}
+
+#adminPanel button, #loginPanel button {
+  margin-top: 10px;
+  padding: 8px;
+  width: 100%;
+  cursor: pointer;
 }
