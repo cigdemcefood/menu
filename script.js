@@ -16,7 +16,6 @@ let data = JSON.parse(localStorage.getItem("menuData")) || {
 let currentTab = Object.keys(data.tabs)[0];
 let isAdmin = false;
 
-// Elementler
 const siteTitle = document.getElementById("siteTitle");
 const siteLogo = document.getElementById("siteLogo");
 const headerMsg = document.getElementById("headerMsg");
@@ -24,13 +23,11 @@ const menuTabs = document.getElementById("menuTabs");
 const menuContent = document.getElementById("menuContent");
 const adminPanel = document.getElementById("adminPanel");
 const loginPanel = document.getElementById("loginPanel");
-
-// Footer links
 const whatsappLink = document.getElementById("whatsappLink");
 const instagramLink = document.getElementById("instagramLink");
 const locationLink = document.getElementById("locationLink");
 
-// Render fonksiyonu
+// Render
 function render() {
   siteTitle.textContent = data.title;
   document.body.style.backgroundColor = data.bgColor;
@@ -45,7 +42,6 @@ function render() {
     headerMsg.classList.remove("hidden");
   } else headerMsg.classList.add("hidden");
 
-  // Sekmeler
   menuTabs.innerHTML = "";
   Object.keys(data.tabs).forEach(tab => {
     const btn = document.createElement("button");
@@ -56,7 +52,6 @@ function render() {
 
   renderContent();
 
-  // Footer
   whatsappLink.href = data.footerLinks.whatsapp;
   instagramLink.href = data.footerLinks.instagram;
   locationLink.href = data.footerLinks.location;
@@ -84,7 +79,7 @@ function renderContent() {
   });
 }
 
-// Admin işlemleri
+// Admin login
 document.getElementById("secretLoginArea").onclick = () => loginPanel.classList.remove("hidden");
 document.getElementById("cancelLogin").onclick = () => loginPanel.classList.add("hidden");
 document.getElementById("loginBtn").onclick = () => {
@@ -94,29 +89,41 @@ document.getElementById("loginBtn").onclick = () => {
     isAdmin=true;
     loginPanel.classList.add("hidden");
     adminPanel.classList.remove("hidden");
-
-    // admin input doldur
-    document.getElementById("siteTitleInput").value=data.title;
-    document.getElementById("siteLogoInput").value=data.logo;
-    document.getElementById("headerMsgInput").value=data.headerMsg;
-    document.getElementById("headerMsgActive").checked=data.headerMsgActive;
-    document.getElementById("bgColorInput").value=data.bgColor;
-    document.getElementById("textColorInput").value=data.textColor;
-    document.getElementById("fontSelect").value=data.font;
-    document.getElementById("whatsappInput").value=data.footerLinks.whatsapp;
-    document.getElementById("instagramInput").value=data.footerLinks.instagram;
-    document.getElementById("locationInput").value=data.footerLinks.location;
+    fillAdminInputs();
   } else alert("Hatalı giriş!");
 };
 
+function fillAdminInputs(){
+  document.getElementById("siteTitleInput").value=data.title;
+  document.getElementById("headerMsgInput").value=data.headerMsg;
+  document.getElementById("headerMsgActive").checked=data.headerMsgActive;
+  document.getElementById("bgColorInput").value=data.bgColor;
+  document.getElementById("textColorInput").value=data.textColor;
+  document.getElementById("fontSelect").value=data.font;
+  document.getElementById("whatsappInput").value=data.footerLinks.whatsapp;
+  document.getElementById("instagramInput").value=data.footerLinks.instagram;
+  document.getElementById("locationInput").value=data.footerLinks.location;
+}
+
 // Genel ayarlar
 document.getElementById("siteTitleInput").oninput=e=>{data.title=e.target.value;save();}
-document.getElementById("siteLogoInput").oninput=e=>{data.logo=e.target.value;save();}
 document.getElementById("headerMsgInput").oninput=e=>{data.headerMsg=e.target.value;save();}
 document.getElementById("headerMsgActive").onchange=e=>{data.headerMsgActive=e.target.checked;save();}
 document.getElementById("bgColorInput").oninput=e=>{data.bgColor=e.target.value;save();}
 document.getElementById("textColorInput").oninput=e=>{data.textColor=e.target.value;save();}
-document.getElementById("fontSelect").onchange=e=>{data.font=e.target.value;save();};
+document.getElementById("fontSelect").onchange=e=>{data.font=e.target.value;save();}
+
+// Logo yükleme
+document.getElementById("siteLogoFile").onchange = e => {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = evt => {
+    data.logo = evt.target.result;
+    save();
+  };
+  reader.readAsDataURL(file);
+};
 
 // Sekme yönetimi
 document.getElementById("addTabBtn").onclick=()=>{const name=document.getElementById("newTabName").value.trim();if(name&&!data.tabs[name]){data.tabs[name]=[];currentTab=name;save();}};
@@ -124,47 +131,38 @@ document.getElementById("removeTabBtn").onclick=()=>{if(confirm(`${currentTab} s
 document.getElementById("renameTabBtn").onclick=()=>{const newName=prompt("Yeni sekme adı:",currentTab);if(newName&&newName!==currentTab){data.tabs[newName]=data.tabs[currentTab];delete data.tabs[currentTab];currentTab=newName;save();}};
 
 // Ürün ekleme
-document.getElementById("addProductBtn").onclick=()=>{
-  const name=document.getElementById("productName").value;
-  const desc=document.getElementById("productDesc").value;
-  const price=document.getElementById("productPrice").value;
-  const url=document.getElementById("productImage").value.trim();
-  const file=document.getElementById("productImageFile").files[0];
+document.getElementById("addProductBtn").onclick = () => {
+  const name = document.getElementById("productName").value.trim();
+  const desc = document.getElementById("productDesc").value.trim();
+  const price = document.getElementById("productPrice").value.trim();
+  const file = document.getElementById("productImageFile").files[0];
 
-  function addProduct(finalUrl){
-    data.tabs[currentTab].push({name,desc,price,image:finalUrl});
-    save();
-    document.getElementById("productName").value="";
-    document.getElementById("productDesc").value="";
-    document.getElementById("productPrice").value="";
-    document.getElementById("productImage").value="";
-    document.getElementById("productImageFile").value="";
-  }
+  if(!file){ alert("Lütfen bir resim seçin!"); return; }
+  if(!name){ alert("Ürün adı girin!"); return; }
 
-  if(file){
-    resizeImage(file,600,400,addProduct);
-  } else if(url) addProduct(url);
-  else alert("Resim URL veya Dosya seçiniz!");
-};
-
-// Canvas ile resim boyutlandırma
-function resizeImage(file,maxW,maxH,callback){
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const img=new Image();
-    img.onload=()=>{
-      const canvas=document.createElement("canvas");
-      const ratio=Math.min(maxW/img.width,maxH/img.height);
-      canvas.width=img.width*ratio;
-      canvas.height=img.height*ratio;
-      const ctx=canvas.getContext("2d");
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const maxW = 600, maxH = 400;
+      const ratio = Math.min(maxW/img.width, maxH/img.height,1);
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width*ratio;
+      canvas.height = img.height*ratio;
+      const ctx = canvas.getContext("2d");
       ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      callback(canvas.toDataURL("image/jpeg",0.9));
+      const finalUrl = canvas.toDataURL("image/jpeg",0.9);
+      data.tabs[currentTab].push({name,desc,price,image:finalUrl});
+      save();
+      document.getElementById("productName").value="";
+      document.getElementById("productDesc").value="";
+      document.getElementById("productPrice").value="";
+      document.getElementById("productImageFile").value="";
     };
-    img.src=e.target.result;
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
-}
+};
 
 // Footer linkleri
 document.getElementById("whatsappInput").oninput=e=>{data.footerLinks.whatsapp=e.target.value;save();}
