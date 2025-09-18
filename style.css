@@ -1,9 +1,11 @@
+/* Genel Stil */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   background-color: #fff8f0;
   color: #333;
   text-align: center;
+  transition: all 0.3s ease;
 }
 
 header {
@@ -12,6 +14,13 @@ header {
   padding: 15px;
 }
 
+header img {
+  max-height: 80px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Sekmeler */
 #menuTabs {
   display: flex;
   justify-content: center;
@@ -47,19 +56,27 @@ header {
   border-radius: 10px;
 }
 
+.product-card button {
+  margin-top: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
 /* Gizli login alanı */
 #secretLoginArea {
   position: fixed;
-  bottom: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
-  background: transparent;
+  bottom: 10px;
+  right: 10px;
+  font-size: 24px;
   cursor: pointer;
-  z-index: 100;
+  color: #666;
+  opacity: 0.5;
+}
+#secretLoginArea:hover {
+  opacity: 1;
 }
 
-/* Panel ve login modal */
+/* Admin ve login panelleri */
 .hidden {
   display: none;
 }
@@ -81,7 +98,8 @@ header {
   margin-top: 0;
 }
 
-#adminPanel input, #loginPanel input {
+#adminPanel input, #loginPanel input,
+#adminPanel select {
   width: 100%;
   margin: 5px 0;
   padding: 5px;
