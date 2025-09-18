@@ -47,6 +47,19 @@ header {
   border-radius: 10px;
 }
 
+/* Gizli login alanı (küçük kutu sağ alt köşede) */
+#secretLoginArea {
+  position: fixed;
+  bottom: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+  z-index: 100;
+}
+
+/* Modal */
 .hidden {
   display: none;
 }
@@ -61,4 +74,5 @@ header {
   border: 2px solid #333;
   border-radius: 12px;
   z-index: 1000;
+  width: 300px;
 }
