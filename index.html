@@ -18,7 +18,7 @@
   <main id="menuContent"></main>
 
   <!-- Gizli Admin Giriş Noktası -->
-  <div id="secretLoginArea" title="Admin Girişi için tıklayın"></div>
+  <div id="secretLoginArea" title="Admin Girişi için tıklayın">⚙️</div>
 
   <!-- Admin giriş ekranı -->
   <div id="loginPanel" class="hidden">
@@ -32,17 +32,35 @@
   <!-- Admin Panel -->
   <div id="adminPanel" class="hidden">
     <h2>Admin Panel</h2>
-    <label>Başlık: <input type="text" id="siteTitleInput"></label>
-    <label>Renk: <input type="color" id="siteColorInput"></label>
 
+    <!-- Genel Ayarlar -->
+    <h3>Genel Ayarlar</h3>
+    <label>Site Başlığı: <input type="text" id="siteTitleInput"></label>
+    <label>Logo: <input type="file" id="siteLogoInput"></label>
+    <label>Arka Plan Rengi: <input type="color" id="bgColorInput"></label>
+    <label>Yazı Rengi: <input type="color" id="textColorInput"></label>
+    <label>Yazı Tipi: 
+      <select id="fontSelect">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Courier New">Courier New</option>
+      </select>
+    </label>
+
+    <!-- Sekme Yönetimi -->
     <h3>Sekme Yönetimi</h3>
     <label>Yeni Sekme Adı: <input type="text" id="newTabName"></label>
     <button id="addTabBtn">Sekme Ekle</button>
+    <button id="removeTabBtn">Aktif Sekmeyi Sil</button>
+    <button id="renameTabBtn">Aktif Sekmeyi Yeniden Adlandır</button>
 
+    <!-- Ürün Yönetimi -->
     <h3>Ürün Yönetimi</h3>
     <label>Ürün Adı: <input type="text" id="productName"></label>
-    <label>Ürün Açıklaması: <input type="text" id="productDesc"></label>
-    <label>Ürün Resmi: <input type="file" id="productImage"></label>
+    <label>Açıklama: <input type="text" id="productDesc"></label>
+    <label>Fiyat: <input type="text" id="productPrice"></label>
+    <label>Resim: <input type="file" id="productImage"></label>
     <button id="addProductBtn">Ürün Ekle</button>
 
     <button id="logoutBtn">Çıkış</button>
