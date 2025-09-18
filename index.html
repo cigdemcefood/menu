@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Çiğdemce Ev Yemekleri & Meze</title>
   <link rel="stylesheet" href="style.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
   <header>
+    <img id="siteLogo" src="" alt="Logo" class="hidden">
     <h1 id="siteTitle">Çiğdemce Ev Yemekleri & Meze</h1>
+    <p id="headerMsg" class="hidden"></p>
   </header>
 
   <!-- Sekmeler -->
@@ -16,6 +19,16 @@
 
   <!-- Menü içerikleri -->
   <main id="menuContent"></main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-icons">
+      <a id="whatsappLink" href="#" target="_blank"><i class='bx bxl-whatsapp'></i></a>
+      <a id="instagramLink" href="#" target="_blank"><i class='bx bxl-instagram'></i></a>
+      <a id="locationLink" href="#" target="_blank"><i class='bx bxs-map'></i></a>
+    </div>
+    <p id="developerInfo">Geliştirici: Senin Adın</p>
+  </footer>
 
   <!-- Gizli Admin Giriş Noktası -->
   <div id="secretLoginArea" title="Admin Girişi için tıklayın">⚙️</div>
@@ -36,7 +49,9 @@
     <!-- Genel Ayarlar -->
     <h3>Genel Ayarlar</h3>
     <label>Site Başlığı: <input type="text" id="siteTitleInput"></label>
-    <label>Logo: <input type="file" id="siteLogoInput"></label>
+    <label>Logo URL: <input type="text" id="siteLogoInput" placeholder="https://..."></label>
+    <label>Header Mesaj: <input type="text" id="headerMsgInput"></label>
+    <label>Header Mesaj Aktif: <input type="checkbox" id="headerMsgActive"></label>
     <label>Arka Plan Rengi: <input type="color" id="bgColorInput"></label>
     <label>Yazı Rengi: <input type="color" id="textColorInput"></label>
     <label>Yazı Tipi: 
@@ -60,8 +75,14 @@
     <label>Ürün Adı: <input type="text" id="productName"></label>
     <label>Açıklama: <input type="text" id="productDesc"></label>
     <label>Fiyat: <input type="text" id="productPrice"></label>
-    <label>Resim: <input type="file" id="productImage"></label>
+    <label>Resim URL: <input type="text" id="productImage" placeholder="https://..."></label>
     <button id="addProductBtn">Ürün Ekle</button>
+
+    <!-- Footer Linkleri -->
+    <h3>Footer Ayarları</h3>
+    <label>WhatsApp URL: <input type="text" id="whatsappInput" placeholder="https://wa.me/..."></label>
+    <label>Instagram URL: <input type="text" id="instagramInput" placeholder="https://instagram.com/..."></label>
+    <label>Lokasyon URL: <input type="text" id="locationInput" placeholder="https://maps.google.com/..."></label>
 
     <button id="logoutBtn">Çıkış</button>
   </div>
